@@ -1,0 +1,15 @@
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: |
+    curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+  displayName: 'Install Postman CLI'
+
+- task: CmdLine@2
+  displayName: 'Run automated API tests using Postman CLI'
+  inputs:
+    script: |
+        postman login --with-api-key $(POSTMAN_API_KEY)
+        # Run your collection using Postman CLI
+        postman collection run "20451308-79d7446e-9e3b-4ec7-8382-9a643008a567" -e "20451308-e704d8fe-facb-4728-9d3e-f4bd92b14dde"
