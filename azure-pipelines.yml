@@ -1,9 +1,4 @@
 pool:
-- task: Npm@1
-  inputs:
-    command: 'custom'
-    workingDir: 'colections'
-    customCommand: 'install newman -g'
   vmImage: ubuntu-latest
 
 steps:
