@@ -1,7 +1,15 @@
 pool:
+- task: Npm@1
+  inputs:
+    command: 'custom'
+    workingDir: 'colections'
+    customCommand: 'install newman -g'
   vmImage: ubuntu-latest
 
 steps:
+- task: Npm@1
+  inputs:
+    command: 'install'
 - script: |
     curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
   displayName: 'Install Postman CLI'
