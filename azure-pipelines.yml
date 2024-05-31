@@ -12,29 +12,61 @@ pool:
   name: Default
 
 steps:
+# Install Newman
 - task: Npm@1
-  displayName: 'Install npm'
+  displayName: 'Install Newman'
   inputs:
-    command: custom
+    command: 'install'
     verbose: false
-    customCommand: 'install newman -g'
+    customCommand: '-g newman'
 
+# Install HTML Reporter for Newman
 - task: Npm@1
-  displayName: 'Install html report'
+  displayName: 'Install HTML Reporter'
   inputs:
-    command: custom
+    command: 'install'
     verbose: false
-    customCommand: 'install -g newman-reporter-htmlextra'
-  
-- script: 'newman run TesteApi-develop.postman_collection -e develop.postman_environment.json -r htmlextra --reporters cli,junit,json,htmlextra --reporter-junit-export junitReport.xml --reporter-htmlextra-export TestReport.html'
-  displayName: 'Run test with report'
+    customCommand: '-g newman-reporter-htmlextra'
 
-- task: MaciejMaciejewski.postman-report.UploadPostmanHtmlReport.UploadPostmanHtmlReport@1
-  displayName: 'Upload Postman Html Report'
+# Install JUnit Merge Tool
+- task: Npm@1
+  displayName: 'Install JUnit Merge Tool'
+  inputs:
+    command: 'install'
+    verbose: false
+    customCommand: '-g junit-merge'
+
+# Verify installations
+- powershell: |
+    npm list -g newman 
+    npm list -g newman-reporter-htmlextra  
+    npm list -g junit-merge 
+    node -v
+  displayName: 'Check Installations'
+
+# Run Newman tests with specific configurations
+- powershell: |
+    npx newman run 01_usuarios.postman_collection.json -e develop.postman_environment.json -g workspace.postman_globals.json --delay-request 1 -r cli,junit,json,htmlextra --reporter-junit-export junitReport1.xml --reporter-htmlextra-export tests_users.html
+    npx newman run 02_login.postman_collection.json -e develop.postman_environment.json -g workspace.postman_globals.json --delay-request 1 -r cli,junit,json,htmlextra --reporter-junit-export junitReport2.xml --reporter-htmlextra-export tests_login.html
+  displayName: 'Run tests'
   continueOnError: true
 
-- task: PublishTestResults@2
-  displayName: 'Publish Test Results '
+# Merge JUnit reports into one
+- script: |
+    junit-merge junitReport1.xml junitReport2.xml -o mergedJunitReport.xml
+  displayName: 'Merge JUnit Reports'
+  continueOnError: true
+
+# Upload HTML reports
+- task: MaciejMaciejewski.postman-report.UploadPostmanHtmlReport.UploadPostmanHtmlReport@1
+  displayName: 'Upload Merged Postman HTML Report'
   inputs:
-    testResultsFiles: '**/*.xml'
-    testRunTitle: Results
+    reportFile: 'tests_users.html tests_login.html'
+  continueOnError: true
+
+# Publish JUnit test results
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results'
+  inputs:
+    testResultsFiles: '**/mergedJunitReport.xml'
+    testRunTitle: 'Postman Test Results'
