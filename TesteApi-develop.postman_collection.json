@@ -1,0 +1,777 @@
+{
+	"info": {
+		"_postman_id": "79d7446e-9e3b-4ec7-8382-9a643008a567",
+		"name": "TesteApi-develop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20451308"
+	},
+	"item": [
+		{
+			"name": "Usuários",
+			"item": [
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "login_com_sucesso",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const getRequest = {\r",
+											"  url: `${pm.environment.get('baseUrl')}/usuarios`,\r",
+											"  method: 'GET',\r",
+											"  header: {\r",
+											"    'Content-Type': 'application/json',\r",
+											"  }\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest, (error, response) => {\r",
+											"    console.log(error ? error : response.json());\r",
+											"    const responseJson = response.json()\r",
+											"\r",
+											"    function numberRandomMax(max) {\r",
+											"     return Math.floor(Math.random() * (max + 1));\r",
+											"    }\r",
+											"\r",
+											"    const totalCount = responseJson.quantidade\r",
+											"\r",
+											"    let numberRandom = numberRandomMax(totalCount);\r",
+											"    \r",
+											"    let resppnseUserEmail = responseJson.usuarios[numberRandom].email\r",
+											"    let resppnseUserPassword = responseJson.usuarios[numberRandom].password\r",
+											"\r",
+											"    pm.environment.set('emailCadastrado', resppnseUserEmail)\r",
+											"    pm.environment.set('senhaCadastrada', resppnseUserPassword)\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"status code 200\", function() {",
+											"    pm.response.to.have.status(200)",
+											"});",
+											"",
+											"pm.test(\"Validar menssage body response\", function() {",
+											"    let responseJson = pm.response.json();",
+											"    pm.expect(responseJson.message).to.equal('Login realizado com sucesso');",
+											"    pm.expect(responseJson.authorization).to.not.be.null;",
+											"    pm.expect(responseJson.authorization).to.not.be.undefined;",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"{{emailCadastrado}}\",\r\n  \"password\": \"{{senhaCadastrada}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login_sem_email",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const getRequest = {\r",
+											"  url: `${pm.environment.get('baseUrl')}/usuarios`,\r",
+											"  method: 'GET',\r",
+											"  header: {\r",
+											"    'Content-Type': 'application/json',\r",
+											"  }\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest, (error, response) => {\r",
+											"    console.log(error ? error : response.json());\r",
+											"    const responseJson = response.json()\r",
+											"\r",
+											"    function numberRandomMax(maximo) {\r",
+											"     return Math.floor(Math.random() * (maximo + 1));\r",
+											"    }\r",
+											"\r",
+											"    const totalCount = responseJson.quantidade\r",
+											"\r",
+											"    let numberRandom = numberRandomMax(totalCount);\r",
+											"    \r",
+											"    let resppnseUserEmail = responseJson.usuarios[numberRandom].email\r",
+											"    let resppnseUserPassword = responseJson.usuarios[numberRandom].password\r",
+											"\r",
+											"    pm.environment.set('emailCadastrado', resppnseUserEmail)\r",
+											"    pm.environment.set('senhaCadastrada', resppnseUserPassword)\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"status code 400\", function() {",
+											"    pm.response.to.have.status(400)",
+											"});",
+											"",
+											"pm.test(\"Validar menssage body response\", function() {",
+											"    let responseJson = pm.response.json();",
+											"    pm.expect(responseJson.email).to.equal('email não pode ficar em branco');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"\",\r\n  \"password\": \"{{senhaCadastrada}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login_sem_password",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const getRequest = {\r",
+											"  url: `${pm.environment.get('baseUrl')}/usuarios`,\r",
+											"  method: 'GET',\r",
+											"  header: {\r",
+											"    'Content-Type': 'application/json',\r",
+											"  }\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest, (error, response) => {\r",
+											"    console.log(error ? error : response.json());\r",
+											"    const responseJson = response.json()\r",
+											"\r",
+											"    function numberRandomMax(maximo) {\r",
+											"     return Math.floor(Math.random() * (maximo + 1));\r",
+											"    }\r",
+											"\r",
+											"    const totalCount = responseJson.quantidade\r",
+											"\r",
+											"    let numberRandom = numberRandomMax(totalCount);\r",
+											"    \r",
+											"    let resppnseUserEmail = responseJson.usuarios[numberRandom].email\r",
+											"    let resppnseUserPassword = responseJson.usuarios[numberRandom].password\r",
+											"\r",
+											"    pm.environment.set('emailCadastrado', resppnseUserEmail)\r",
+											"    pm.environment.set('senhaCadastrada', resppnseUserPassword)\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"status code 400\", function() {",
+											"    pm.response.to.have.status(400)",
+											"});",
+											"",
+											"pm.test(\"Validar menssage body response\", function() {",
+											"    let responseJson = pm.response.json();",
+											"    pm.expect(responseJson.password).to.equal('password não pode ficar em branco');",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"{{emailCadastrado}}\",\r\n  \"password\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Listar_usuarios",
+					"item": [
+						{
+							"name": "retornar_todos _usuarios_cadastrados_sucesso",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validar status code 200\", function() {\r",
+											"    pm.response.to.have.status(200)\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validar lista de usuario\", function() {\r",
+											"    const responseJson =  JSON.parse(responseBody)\r",
+											"    console.log(responseJson)\r",
+											"\r",
+											"    pm.expect(responseJson.quantidade).to.be.above(0)\r",
+											"\r",
+											"    responseJson.usuarios.forEach((users) => \r",
+											"    pm.expect(users).to.have.keys('nome', 'email', 'password', 'administrador', '_id' ).not.be.empty\r",
+											"    );\r",
+											"\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let emailRandom = pm.variables.replaceIn('{{$guid}}')\r",
+											"pm.environment.set('email', `${emailRandom}@uorak.com`)\r",
+											"\r",
+											"let nameRandom = pm.variables.replaceIn('{{$randomFullName}}')\r",
+											"pm.environment.set('name', nameRandom)\r",
+											"\r",
+											"const criateUsuario = {\r",
+											"    url: `${pm.environment.get('baseUrl')}/usuarios`,\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: JSON.stringify({\r",
+											"        nome: `${pm.environment.get('name')}`,\r",
+											"        email: `${pm.environment.get('email')}`,\r",
+											"        password: \"teste\",\r",
+											"        administrador: 'true'\r",
+											"    })\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(criateUsuario, (error, response) => {\r",
+											"    console.log(error ? error : response.json());\r",
+											"    \r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/usuarios",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cadastrar_usuario_com_sucesso",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"status code 201\", function () {\r",
+											"    pm.response.to.have.status(201)\r",
+											"})\r",
+											"\r",
+											"pm.test(\"Validar menssage body response\", function () {\r",
+											"    let responseJson = JSON.parse(responseBody)\r",
+											"    pm.expect(responseJson.message).to.have.eq('Cadastro realizado com sucesso')\r",
+											"    pm.environment.set('id', responseJson._id)\r",
+											"})\r",
+											"\r",
+											"pm.test(\"Validar se usuario foi criado\", function () {\r",
+											"    const getUsuario = {\r",
+											"        url: `${pm.environment.get('baseUrl')}/usuarios/${pm.environment.get('id')}`,\r",
+											"        method: 'GET',\r",
+											"        header: {\r",
+											"            'Content-Type': 'application/json',\r",
+											"        }\r",
+											"    };\r",
+											"\r",
+											"    pm.sendRequest(getUsuario, (error, response) => {\r",
+											"        console.log(error ? error : response.json());\r",
+											"\r",
+											"        if(!error) {\r",
+											"             pm.expect(response.json().nome).to.be.eqls(pm.environment.get('name'))\r",
+											"             pm.expect(response.json()._id).to.be.eqls(pm.environment.get('id'))\r",
+											"        }\r",
+											"\r",
+											"    });\r",
+											"\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let emailRandom = pm.variables.replaceIn('{{$guid}}')\r",
+											"pm.environment.set('email', `${emailRandom}@uorak.com`)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"{{name}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n} ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/usuarios",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cadastrar_usuario_com_email _vinucado_a_outra_conta",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"status code 201\", function() {\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validar menssage body response\", function() {\r",
+											"    let responseJson = JSON.parse(responseBody)\r",
+											"    pm.expect(responseJson.message).to.have.eq('Este email já está sendo usado')\r",
+											"});\r",
+											"\r",
+											"pm.test()\r",
+											"\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const getRequest = {\r",
+											"  url: `${pm.environment.get('baseUrl')}/usuarios`,\r",
+											"  method: 'GET',\r",
+											"  header: {\r",
+											"    'Content-Type': 'application/json',\r",
+											"  }\r",
+											"};\r",
+											"\r",
+											"pm.sendRequest(getRequest, (error, response) => {\r",
+											"    console.log(error ? error : response.json());\r",
+											"    const responseJson = response.json()\r",
+											"\r",
+											"    function numberRandomMax(maximo) {\r",
+											"     return Math.floor(Math.random() * (maximo + 1));\r",
+											"    }\r",
+											"\r",
+											"    const totalCount = responseJson.quantidade\r",
+											"\r",
+											"    let numberRandom = numberRandomMax(totalCount);\r",
+											"    \r",
+											"    let resppnseUserEmail = responseJson.usuarios[numberRandom].email\r",
+											"\r",
+											"    pm.environment.set('emailCadastrado', resppnseUserEmail)\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Fulano da Silva\",\r\n  \"email\": \"{{emailCadastrado}}\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n} ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/usuarios",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cadastrar_usuario_sem_email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"status code 400\", function() {\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validar menssage body response\", function() {\r",
+											"    let responseJson = JSON.parse(responseBody)\r",
+											"    pm.expect(responseJson.email).to.have.eq('email não pode ficar em branco')\r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let emailRandom = pm.variables.replaceIn('{{$guid}}')\r",
+											"pm.environment.set('email', `${emailRandom}@armin.com.br`)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Fulano da Silva\",\r\n  \"email\": \"\",\r\n  \"password\": \"teste\",\r\n  \"administrador\": \"true\"\r\n} ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/usuarios",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cadastrar_usuario_sem_administrador",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"status code 400\", function() {\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validar menssage body response\", function() {\r",
+											"    let responseJson = JSON.parse(responseBody)\r",
+											"    pm.expect(responseJson.administrador).to.have.eq(`administrador deve ser 'true' ou 'false'`)\r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let emailRandom = pm.variables.replaceIn('{{$guid}}')\r",
+											"pm.environment.set('email', `${emailRandom}@armin.com.br`)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"TESTE\",\r\n  \"email\": \"{{emailCadastrado}}\",\r\n  \"password\": \"teste@1007\",\r\n  \"administrador\": \"\"\r\n} ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/usuarios",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cadastrar_usuario_sem_password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"status code 400\", function() {\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validar menssage body response\", function() {\r",
+											"    let responseJson = JSON.parse(responseBody)\r",
+											"    pm.expect(responseJson.password).to.have.eq('password não pode ficar em branco')\r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let emailRandom = pm.variables.replaceIn('{{$guid}}')\r",
+											"pm.environment.set('email', `${emailRandom}@armin.com.br`)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"Fulano da Silva\",\r\n  \"email\": \"{{emailCadastrado}}\",\r\n  \"password\": \"\",\r\n  \"administrador\": \"true\"\r\n} ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/usuarios",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cadastrar_usuario_sem_nome",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"status code 400\", function() {\r",
+											"    pm.response.to.have.status(400)\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Validar menssage body response\", function() {\r",
+											"    let responseJson = JSON.parse(responseBody)\r",
+											"    pm.expect(responseJson.nome).to.have.eq('nome não pode ficar em branco')\r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let emailRandom = pm.variables.replaceIn('{{$guid}}')\r",
+											"pm.environment.set('email', `${emailRandom}@armin.com.br`)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nome\": \"\",\r\n  \"email\": \"{{emailCadastrado}}\",\r\n  \"password\": \"teste@1007\",\r\n  \"administrador\": \"true\"\r\n} ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/usuarios",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
