@@ -1,9 +1,8 @@
 ### Considerações para o  uso da ferramenta:
   A ferramenta utilizada foi em base a linguagem javasript que a empresa em que estou atuando utiliza no back-end e front-end (empresa com grupo pequeno de 
-desenvolvedores e um unico QA.. eu, prazer), tendo a princial sugestão que Qa fique ausente o time de desenvolvimento possa atuar nos teste de integração
-por isso que busquei a ferrmenta postman;
+desenvolvedores e um unico QA.. eu, prazer), tendo a princial sugestão que o Qa fique ausente o time de desenvolvimento possa atuar nos teste de integração;
 
-Caso seu contexto seja diferente poderá outras adotar outra abordagem paa teste automatizado a nivel de inteegração como pactumJs, Cypress ou Robotframework
+Caso seu contexto seja diferente poderá adotar outras abordagem paa testes automatizados a nivel de inteegração como pactumJs, Cypress ou Robotframework
 
 ### Pontos positivos: 
 1. Então quando se fala em "teste em api" a maioria dos devs utilizam o postman para manipulação;
