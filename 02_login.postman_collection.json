@@ -1,0 +1,298 @@
+{
+	"info": {
+		"_postman_id": "31ba24b3-2435-4030-9a2f-550023aa48e4",
+		"name": "02_login",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35029765"
+	},
+	"item": [
+		{
+			"name": "login_com_sucesso",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const getRequest = {\r",
+							"  url: `${pm.environment.get('baseUrl')}/usuarios`,\r",
+							"  method: 'GET',\r",
+							"  header: {\r",
+							"    'Content-Type': 'application/json',\r",
+							"  }\r",
+							"};\r",
+							"\r",
+							"pm.sendRequest(getRequest, (error, response) => {\r",
+							"    console.log(error ? error : response.json());\r",
+							"    const responseJson = response.json()\r",
+							"\r",
+							"    function numberRandomMax(max) {\r",
+							"     return Math.floor(Math.random() * (max + 1));\r",
+							"    }\r",
+							"\r",
+							"    const totalCount = responseJson.quantidade\r",
+							"\r",
+							"    let numberRandom = numberRandomMax(totalCount);\r",
+							"    \r",
+							"    let resppnseUserEmail = responseJson.usuarios[numberRandom].email\r",
+							"    let resppnseUserPassword = responseJson.usuarios[numberRandom].password\r",
+							"\r",
+							"    pm.environment.set('emailRegistered', resppnseUserEmail)\r",
+							"    pm.environment.set('passwordRegistered', resppnseUserPassword)\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Resposta é  200\", function() {",
+							"    pm.response.to.have.status(200)",
+							"});",
+							"",
+							"pm.test(\"Validar menssage body response\", function() {",
+							"    let responseJson = pm.response.json();",
+							"    pm.expect(responseJson.message).to.equal('Login realizado com sucesso');",
+							"    pm.expect(responseJson.authorization).to.not.be.null;",
+							"    pm.expect(responseJson.authorization).to.not.be.undefined;",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"{{emailRegistered}}\",\r\n  \"password\": \"{{passwordRegistered}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login_sem_email",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const getRequest = {\r",
+							"  url: `${pm.environment.get('baseUrl')}/usuarios`,\r",
+							"  method: 'GET',\r",
+							"  header: {\r",
+							"    'Content-Type': 'application/json',\r",
+							"  }\r",
+							"};\r",
+							"\r",
+							"pm.sendRequest(getRequest, (error, response) => {\r",
+							"    console.log(error ? error : response.json());\r",
+							"    const responseJson = response.json();\r",
+							"\r",
+							"    let selectUser = Math.floor(Math.random() * responseJson.quantidade);\r",
+							"\r",
+							"    pm.environment.set('passwordRegistered', responseJson.usuarios[selectUser].password)\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Resposta é 400\", function() {",
+							"    pm.response.to.have.status(400)",
+							"});",
+							"",
+							"pm.test(\"Validar menssage body response\", function() {",
+							"    let responseJson = pm.response.json();",
+							"    pm.expect(responseJson.email).to.equal('email não pode ficar em branco');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"\",\r\n  \"password\": \"{{passwordRegistered}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login_sem_password",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const getUsers = {\r",
+							"  url: `${pm.environment.get('baseUrl')}/usuarios`,\r",
+							"  method: 'GET',\r",
+							"  header: {\r",
+							"    'Content-Type': 'application/json',\r",
+							"  }\r",
+							"};\r",
+							"\r",
+							"pm.sendRequest(getUsers, (error, response) => {\r",
+							"    console.log(error ? error : response.json());\r",
+							"    const responseJson = response.json();\r",
+							"\r",
+							"    let selectUser = Math.floor(Math.random() * responseJson.quantidade);\r",
+							"\r",
+							"    pm.environment.set('emailRegistered', JSON.stringify(responseJson.usuarios[selectUser].email).replace(/\"/g, ''))\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Resposta é 400\", function() {",
+							"    pm.response.to.have.status(400)",
+							"});",
+							"",
+							"pm.test(\"Validar texto na key password\", function() {",
+							"    let responseJson = pm.response.json();",
+							"    pm.expect(responseJson.password).to.equal('password não pode ficar em branco');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"{{emailRegistered}}\",\r\n  \"password\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login_sem_password_sem_email",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Resposta é 400\", function() {",
+							"    pm.response.to.have.status(400)",
+							"});",
+							"",
+							"pm.test(\"Validar texto nas keys password e email no responseBody\", function() {",
+							"    let responseJson = pm.response.json();",
+							"    pm.expect(responseJson.password).to.equal(pm.globals.get('msgPasswordEmpty'));",
+							"    pm.expect(responseJson.email).to.equal(pm.globals.get('msgEmailEmpty'));",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"\",\r\n  \"password\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
