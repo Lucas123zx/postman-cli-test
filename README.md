@@ -39,8 +39,8 @@ Caso seu contexto seja diferente poderá adotar outras abordagem paa testes auto
 
 
 ```
-newman run 01_usuarios.postman_collection.json -e develop.postman_environment.json -g workspace.postman_globals.json -r cli,junit,json,htmlextra --reporter-junit-export junitReport1.xml --reporter-htmlextra-export tests_users.html
-newman run 02_login.postman_collection.json -e develop.postman_environment.json -g workspace.postman_globals.json --delay-request 1 -r cli,junit,json,htmlextra --reporter-junit-export junitReport2.xml --reporter-htmlextra-export tests_login.html
+newman run 01_usuarios.postman_collection.json -e develop.postman_environment.json -g workspace.postman_globals.json -r cli,json,htmlextra --reporter-htmlextra-export tests_users.html
+newman run 02_login.postman_collection.json -e develop.postman_environment.json -g workspace.postman_globals.json -r cli,json,htmlextra --reporter-htmlextra-export tests_login.html
 ```
 
 5. Abir arquivos gerados 'tests_users.html' e 'tests_login.html' dentro da pasta do projeto.
