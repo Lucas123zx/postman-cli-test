@@ -2,19 +2,19 @@
   A ferramenta utilizada foi em base a linguagem javasript que a empresa em que estou atuando utiliza no back-end e front-end (empresa com grupo pequeno de 
 desenvolvedores e um unico QA.. eu, prazer), tendo a principal sugestão que o Qa fique ausente o time de desenvolvimento possa atuar nos teste de integração;
 
-Caso seu contexto seja diferente poderá adotar outras abordagem paa testes automatizados a nivel de inteegração como pactumJs, Cypress ou Robotframework
+Caso seu contexto seja diferente poderá adotar outras abordagem para testes automatizados a nivel de integração como pactumJs, Cypress ou Robotframework
 
 ### Pontos positivos: 
 1. Então quando se fala em "teste em api" a maioria dos devs utilizam o postman para manipulação;
 2. O postman utiliza o a linguaguem javascript para criar scipts de testes;
 3. Newman para gerar relatórios;
 4. Ajuda o time de desenvolvimento a ter testes relativamente com baixa complexidade de manutenção e de facil compresão;
-5.  Ter testes regressisvos a nivel de integração, (é necessário que você saiba testar antes de automatizar testes);
+5. Ter testes regressisvos a nivel de integração, (é necessário que você saiba testar antes de automatizar testes);
 
 ### Pontos negativos:
-1. Postman tem um problema de insegurança (em algumas empresa o insominia e uma opção utilizada)
-2. Dev podem não querer utilizar mais uma ferramenta
-3. Incopatibilidade em Apis que não utilizem a arquitetura Rest
+1. Postman tem um problema de insegurança (em algumas empresa o insominia e uma opção utilizada);
+2. Dev podem não querer utilizar mais uma ferramenta;
+3. Incopatibilidade em Apis que não utilizem a arquitetura Rest;
 
 ---
 
